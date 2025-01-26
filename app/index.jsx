@@ -7,10 +7,19 @@ import {
 } from "react-native";
 import { theme } from "../theme";
 import React from "react";
+import { router } from "expo-router"
+
+
 
 const Index = () => {
+
+
+   
+
     return (
         <>
+            
+
             <View style={styles.container}>
                 <View style={styles.imageContainer}>
                     <View style={styles.container2}>
@@ -30,14 +39,14 @@ const Index = () => {
                 <View style={[styles.buttonGroup]}>
                     <TouchableOpacity
                         style={[styles.button, styles.button1]}
-                        onPress={() => navigation.navigate("SignupPage")}
+                        onPress={() => router.push("/signup")}
                     >
                         <Text style={[styles.buttonText1]}>Sign up</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity
                         style={[styles.button, styles.button2]}
-                        onPress={() => navigation.navigate("LoginPage")}
+                        onPress={() => router.push("/login")}
                     >
                         <Text style={[styles.buttonText2]}>Log in</Text>
                     </TouchableOpacity>
@@ -122,6 +131,8 @@ const styles = StyleSheet.create({
         fontSize: 19.2,
         opacity: 0.5,
     },
+
+   
 });
 
 export default Index;
