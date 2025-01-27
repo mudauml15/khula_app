@@ -13,7 +13,7 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
 2. Change to the working directory
 
    ```bash
-   cd khula-app
+   cd khula_app
    ```
 
 3. Install dependencies
