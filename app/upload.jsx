@@ -15,6 +15,35 @@ import * as ImagePicker from 'expo-image-picker';
 import * as DocumentPicker from 'expo-document-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+
+import { theme } from "../theme";
+import { useRouter } from "expo-router";
+import { useWindowDimensions } from "react-native";
+
+
+
+
+
+const screens = [
+    {
+        id: 1,
+        title: "Welcome",
+        content: "dummy text ",
+    },
+    {
+        id: 2,
+        title: "Welcome",
+        content: "dummy text ",
+    },
+    {
+        id: 3,
+        title: "Welcome",
+        content: "dummy text ",
+    },
+
+
+];
+
 const Upload = () => {
     const [modalVisible, setModalVisible] = useState(false);
     const [selectedSection, setSelectedSection] = useState("");
@@ -209,117 +238,200 @@ const Upload = () => {
         },
     ];
 
+
+    const { width } = useWindowDimensions();
+    const [currentScreen, setCurrentScreen] = useState(0);
+    const router = useRouter();
+    const progress = ((currentScreen + 4) / screens.length) * 100;
+
+    const handleNext = () => {
+        if (currentScreen < screens.length - 1) {
+            setCurrentScreen(currentScreen + 4);
+        } else {
+            router.push("/upload");
+        }
+    };
+
     const renderUploadedFile = (section) => {
         const file = uploadedFiles[section.title];
         if (!file) return null;
 
+
+
+
+
+
+
         return (
-            <View style={styles.uploadedFileContainer}>
-                <View style={styles.filePreview}>
-                    {file.type.includes('image') ? (
-                        <Image source={{ uri: file.uri }} style={styles.uploadedImage} />
-                    ) : (
-                        <Ionicons name="document" size={24} color="#00A676" />
-                    )}
-                    <View style={styles.fileInfo}>
-                        <Text style={styles.uploadedFileName}>
-                            Uploaded: {new Date(file.timestamp).toLocaleDateString()}
-                        </Text>
-                        <TouchableOpacity
-                            onPress={() => handleDeleteFile(section.title)}
-                            style={styles.deleteButton}
-                        >
-                            <Ionicons name="trash-outline" size={20} color="#ff4444" />
-                        </TouchableOpacity>
+            <>
+
+
+
+
+
+
+                <View style={styles.uploadedFileContainer}>
+                    <View style={styles.filePreview}>
+                        {file.type.includes('image') ? (
+                            <Image source={{ uri: file.uri }} style={styles.uploadedImage} />
+                        ) : (
+                            <Ionicons name="document" size={24} color="#00A676" />
+                        )}
+                        <View style={styles.fileInfo}>
+                            <Text style={styles.uploadedFileName}>
+                                Uploaded: {new Date(file.timestamp).toLocaleDateString()}
+                            </Text>
+                            <TouchableOpacity
+                                onPress={() => handleDeleteFile(section.title)}
+                                style={styles.deleteButton}
+                            >
+                                <Ionicons name="trash-outline" size={20} color="#ff4444" />
+                            </TouchableOpacity>
+                        </View>
                     </View>
                 </View>
-            </View>
+
+            </>
+
+
         );
     };
 
     return (
-        <View style={{ flex: 1, backgroundColor: "#F5F5F5" }}>
-            <ScrollView contentContainerStyle={styles.container}>
-                <Text style={styles.headerTitle}>Upload supporting documents</Text>
-                <Text style={styles.headerSubtitle}>
-                    Submit the required documents by uploading files or capturing photos
-                    to complete your application and verify your information.
-                </Text>
 
-                {sections.map((section, index) => (
-                    <View key={index} style={styles.card}>
-                        <Text style={styles.cardTitle}>{section.title}</Text>
-                        <Text style={styles.cardDescription}>{section.description}</Text>
-                        {renderUploadedFile(section)}
-                        <TouchableOpacity
-                            style={styles.uploadButton}
-                            onPress={() => {
-                                setSelectedSection(section.title);
-                                setModalVisible(true);
-                            }}
-                        >
-                            <Ionicons
-                                name={uploadedFiles[section.title] ? "refresh" : "add"}
-                                size={20}
-                                color="#00A676"
-                            />
-                            <Text style={styles.uploadText}>
-                                {uploadedFiles[section.title] ? 'Replace file' : 'Tap here to upload'}
+
+
+        <>
+
+            <View style={styles.container2}>
+                <View style={styles.progressContainer}>
+                    <View style={[styles.progressBar, { width: `${progress}%` }]} />
+                </View>
+            </View>
+
+
+            <View style={{ flex: 1, backgroundColor: "#F5F5F5" }}>
+                <ScrollView contentContainerStyle={styles.container}>
+                    <Text style={styles.headerTitle}>Upload supporting documents</Text>
+                    <Text style={styles.headerSubtitle}>
+                        Submit the required documents by uploading files or capturing photos
+                        to complete your application and verify your information.
+                    </Text>
+
+                    {sections.map((section, index) => (
+                        <View key={index} style={styles.card}>
+                            <Text style={styles.cardTitle}>{section.title}</Text>
+                            <Text style={styles.cardDescription}>{section.description}</Text>
+                            {renderUploadedFile(section)}
+                            <TouchableOpacity
+                                style={styles.uploadButton}
+                                onPress={() => {
+                                    setSelectedSection(section.title);
+                                    setModalVisible(true);
+                                }}
+                            >
+                                <Ionicons
+                                    name={uploadedFiles[section.title] ? "refresh" : "add"}
+                                    size={20}
+                                    color="#00A676"
+                                />
+                                <Text style={styles.uploadText}>
+                                    {uploadedFiles[section.title] ? 'Replace file' : 'Tap here to upload'}
+                                </Text>
+                            </TouchableOpacity>
+                            <Text style={styles.supportText}>
+                                Supported: JPG, PDF, PNG. Maximum file size: 10MB
                             </Text>
-                        </TouchableOpacity>
-                        <Text style={styles.supportText}>
-                            Supported: JPG, PDF, PNG. Maximum file size: 10MB
-                        </Text>
-                    </View>
-                ))}
-            </ScrollView>
+                        </View>
+                    ))}
+                </ScrollView>
 
-            <Modal
-                transparent={true}
-                visible={modalVisible}
-                animationType="slide"
-                onRequestClose={() => setModalVisible(false)}
-            >
-                <View style={styles.modalOverlay}>
-                    <View style={styles.modalBottomContainer}>
-                        <View style={styles.modalHeader}>
-                            <Text style={styles.modalTitle}>Upload {selectedSection}</Text>
-                            <TouchableOpacity onPress={() => setModalVisible(false)}>
-                                <Ionicons name="close" size={30} color="#003E59" />
+                <Modal
+                    transparent={true}
+                    visible={modalVisible}
+                    animationType="slide"
+                    onRequestClose={() => setModalVisible(false)}
+                >
+                    <View style={styles.modalOverlay}>
+                        <View style={styles.modalBottomContainer}>
+                            <View style={styles.modalHeader}>
+                                <Text style={styles.modalTitle}>Upload {selectedSection}</Text>
+                                <TouchableOpacity onPress={() => setModalVisible(false)}>
+                                    <Ionicons name="close" size={30} color="#003E59" />
+                                </TouchableOpacity>
+                            </View>
+                            <Text style={styles.modalDescription}>
+                                Choose an option to upload your file.
+                            </Text>
+
+                            <TouchableOpacity style={styles.modalButton} onPress={handleTakePhoto}>
+                                <View style={styles.iconContainer}>
+                                    <Ionicons name="camera" size={24} color="#00a676df" />
+                                </View>
+                                <Text style={styles.modalButtonText}>Take a Photo</Text>
+                            </TouchableOpacity>
+
+                            <TouchableOpacity style={styles.modalButton} onPress={handleChooseFromGallery}>
+                                <View style={styles.iconContainer}>
+                                    <Ionicons name="image" size={24} color="#00a676df" />
+                                </View>
+                                <Text style={styles.modalButtonText}>Choose from Gallery</Text>
+                            </TouchableOpacity>
+
+                            <TouchableOpacity style={styles.modalButton} onPress={handleUploadFile}>
+                                <View style={styles.iconContainer}>
+                                    <Ionicons name="cloud-upload" size={24} color="#00a676df" />
+                                </View>
+                                <Text style={styles.modalButtonText}>Upload File</Text>
                             </TouchableOpacity>
                         </View>
-                        <Text style={styles.modalDescription}>
-                            Choose an option to upload your file.
-                        </Text>
-
-                        <TouchableOpacity style={styles.modalButton} onPress={handleTakePhoto}>
-                            <View style={styles.iconContainer}>
-                                <Ionicons name="camera" size={24} color="#00a676df" />
-                            </View>
-                            <Text style={styles.modalButtonText}>Take a Photo</Text>
-                        </TouchableOpacity>
-
-                        <TouchableOpacity style={styles.modalButton} onPress={handleChooseFromGallery}>
-                            <View style={styles.iconContainer}>
-                                <Ionicons name="image" size={24} color="#00a676df" />
-                            </View>
-                            <Text style={styles.modalButtonText}>Choose from Gallery</Text>
-                        </TouchableOpacity>
-
-                        <TouchableOpacity style={styles.modalButton} onPress={handleUploadFile}>
-                            <View style={styles.iconContainer}>
-                                <Ionicons name="cloud-upload" size={24} color="#00a676df" />
-                            </View>
-                            <Text style={styles.modalButtonText}>Upload File</Text>
-                        </TouchableOpacity>
                     </View>
-                </View>
-            </Modal>
-        </View>
+                </Modal>
+            </View>
+
+        </>
+
+
+
     );
 };
 
 const styles = StyleSheet.create({
+
+
+
+    container2: {
+       
+        backgroundColor: theme.colors.gray400
+
+    },
+    progressContainer: {
+        height: 4,
+        backgroundColor: theme.colors.gray600,
+        width: "100%",
+        marginTop: 7,
+    },
+    progressBar: {
+        height: "100%",
+        backgroundColor: theme.colors.green100,
+    },
+    content: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        padding: 20,
+    },
+    title: {
+        fontSize: 30,
+        fontWeight: "bold",
+        marginBottom: 10,
+    },
+
+
+
+
+
+
     container: {
         padding: 20,
         backgroundColor: "#F5F5F5",

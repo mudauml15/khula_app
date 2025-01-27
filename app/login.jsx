@@ -4,24 +4,33 @@ import { Ionicons } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { theme } from '../theme'
-import Tracker from '../components/Tracker'
+
+import { useRouter } from "expo-router";
+import { useWindowDimensions } from "react-native";
+
+const screens = [
+    {
+        id: 1,
+        title: "Welcome",
+        content: "dummy text ",
+    },
+    {
+        id: 2,
+        title: "Welcome",
+        content: "dummy text ",
+    },
+    {
+        id: 3,
+        title: "Welcome",
+        content: "dummy text ",
+    },
 
 
-import Profile from "./profile";
+];
+
 
 const LoginPage = () => {
 
-
-
-    const [track, setTrack] = useState(1);
-
-    const onNext = () => {
-        if (track !== 3) setTrack(track => track + 1)
-    }
-
-    const onPrev = () => {
-        if (track !== 1) setTrack(track => track - 1)
-    }
 
 
     const navigation = useNavigation()
@@ -40,17 +49,32 @@ const LoginPage = () => {
         }
     }
 
+
+
+
+
+    const { width } = useWindowDimensions();
+    const [currentScreen, setCurrentScreen] = useState(0);
+    const router = useRouter();
+    const progress = ((currentScreen + 2) / screens.length) * 100;
+
+    const handleNext = () => {
+        if (currentScreen < screens.length - 1) {
+            setCurrentScreen(currentScreen + 2);
+        } else {
+            router.push("/upload");
+        }
+    };
     return (
 
         <>
-            <View style={styles.app}>
-                <Tracker track={track} />
-                {track == 1 && <Tracker onNext={onNext} />}
-                {track == 2 && <Profile onNext={onNext} onPrev={onPrev} />}
-                {track == 3 && <Finish onPrev={onPrev} />}
+
+
+            <View style={styles.container2}>
+                <View style={styles.progressContainer}>
+                    <View style={[styles.progressBar, { width: `${progress}%` }]} />
+                </View>
             </View>
-
-
 
             <View style={styles.container}>
                 <View style={styles.header}>
@@ -95,10 +119,10 @@ const LoginPage = () => {
                 </View>
 
                 <TouchableOpacity
-                    style={styles.button}
-                    onPress={handleSaveUserDetails}
+                    style={styles.Button}
+                    onPress={() => navigation.navigate('upload')}
                 >
-                    <Text style={styles.buttonText}> Continue </Text>
+                    <Text style={styles.ButtonText}>Log in </Text>
                 </TouchableOpacity>
             </View>
         </>
@@ -107,8 +131,40 @@ const LoginPage = () => {
 }
 
 const styles = StyleSheet.create({
-    container: {
+
+
+
+    container2: {
+
+        backgroundColor: "theme.colors.gray400"
+
+    },
+    progressContainer: {
+        height: 4,
+        backgroundColor: theme.colors.gray600,
+        width: "100%",
+        marginTop: 7,
+    },
+    progressBar: {
+        height: "100%",
+        backgroundColor: theme.colors.green100,
+    },
+    content: {
         flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        padding: 20,
+    },
+    title: {
+        fontSize: 30,
+        fontWeight: "bold",
+        marginBottom: 10,
+    },
+
+
+
+    container: {
+        marginTop: 100,
         backgroundColor: '#F5F5F5',
         paddingHorizontal: 20,
         justifyContent: 'center',
@@ -151,17 +207,17 @@ const styles = StyleSheet.create({
         right: 15,
         top: 15,
     },
-    button: {
+    Button: {
         backgroundColor: '#013334',
         borderRadius: 25,
         paddingVertical: 15,
         alignItems: 'center',
         marginTop: 20,
     },
-    buttonText: {
-        color: '#35c080',
+    ButtonText: {
+        color: theme.colors.green200,
         fontSize: 16,
-        fontWeight: 'bold',
+        fontWeight: "bold"
     },
 
     app: {
