@@ -7,7 +7,7 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
 1. Clone the repo
 
    ```bash
-   git clone https://github.com/mudauml15/khula_test.git
+   git clone https://github.com/mudauml15/khula_app.git
    ```
 
 2. Change to the working directory
