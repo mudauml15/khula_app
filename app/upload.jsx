@@ -401,7 +401,7 @@ const styles = StyleSheet.create({
 
 
     container2: {
-       
+
         backgroundColor: theme.colors.gray400
 
     },
@@ -435,12 +435,12 @@ const styles = StyleSheet.create({
     container: {
         padding: 20,
         backgroundColor: "#F5F5F5",
-        flexGrow: 1,
+
     },
     headerTitle: {
         fontSize: 24,
         fontWeight: "bold",
-        color: "#002B4C",
+        color: theme.colors.heading,
         marginBottom: 10,
     },
     headerSubtitle: {
@@ -449,11 +449,11 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     card: {
-        backgroundColor: "white",
+        backgroundColor: theme.colors.white,
         borderRadius: 8,
         padding: 15,
         marginBottom: 15,
-        shadowColor: "#000",
+        shadowColor: "#red",
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.1,
         shadowRadius: 3,

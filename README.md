@@ -4,13 +4,25 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
 
 ## Get started
 
-1. Install dependencies
+1. Clone the repo
+
+   ```bash
+   git clone https://github.com/mudauml15/khula_test.git
+   ```
+
+2. Change to the working directory
+
+   ```bash
+   cd Khula-app
+   ```
+
+3. Install dependencies
 
    ```bash
    npm install
    ```
 
-2. Start the app
+4. Start the app
 
    ```bash
     npx expo start
@@ -48,3 +60,11 @@ Join our community of developers creating universal apps.
 
 - [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
 - [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+
+```
+
+```
+
+```
+
+```
